@@ -15,15 +15,16 @@ struct ContentView: View {
     
     var body: some View {
         let calendar = Calendar.current
-        let startDate = calendar.date(from: DateComponents(year: 2025, month: 10, day: 01))!
-        let endDate = calendar.date(from: DateComponents(year: 2025, month: 12, day: 31))!
+        let startDate = calendar.date(from: DateComponents(year: 1999, month: 01, day: 01))!
+        let endDate = calendar.date(from: DateComponents(year: 2026, month: 12, day: 31))!
         
-        CalendarViewRepresentable(
-            calendar: calendar,
-            visibleDateRange: startDate...endDate,
-            monthsLayout: .horizontal(options: HorizontalMonthsLayoutOptions()),
-            dataDependency: nil
+        CalendarViewRepresentable(calendar: calendar,
+                                  visibleDateRange: startDate...endDate,
+                                  monthsLayout: .horizontal(options: HorizontalMonthsLayoutOptions()),
+                                  dataDependency: nil,
+                                  proxy: CalendarViewProxy()
         )
+        .present
         .days { day in
             VStack {
                 Image(systemName: "\(day.day).square.fill")
@@ -38,9 +39,16 @@ struct ContentView: View {
                     .stroke(Color(UIColor.systemBlue), lineWidth: 1)
             }
         }
-        .padding(.horizontal, 16)
+        .onDaySelection { day in
+            print("tap \(day.components.year)/\(day.components.month)/\(day.components.day)")
+        }
+        .
+        .verticalDayMargin(8)
+        .horizontalDayMargin(8)
+//        .padding(.horizontal, 16)
         .frame(maxWidth: .infinity)
         .background(Color.red)
+        
         Spacer()
     }
     
