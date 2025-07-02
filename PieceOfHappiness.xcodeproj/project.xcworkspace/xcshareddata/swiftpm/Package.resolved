@@ -1,5 +1,5 @@
 {
-  "originHash" : "0f95d1d6ca7aa27a90afc0aac50a0068fbabac451345542b9542e1940c3633b2",
+  "originHash" : "c2c23b4b5388722679cf253ecf40ae937067d0a9fa625c3c6edbc8e1b3ef54b6",
   "pins" : [
     {
       "identity" : "horizoncalendar",
@@ -8,6 +8,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "697c6f22f7e2f6da69fd0ca5dca0d08c973ea3a8"
+      }
+    },
+    {
+      "identity" : "nuke",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Nuke",
+      "state" : {
+        "revision" : "0ead44350d2737db384908569c012fe67c421e4d",
+        "version" : "12.8.0"
       }
     }
   ],
