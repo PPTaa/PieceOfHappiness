@@ -14,12 +14,18 @@ struct PieceCardView: View {
     @State var contents: String = ""
     var body: some View {
         VStack(alignment: .leading) {
-            Text("당신을 위한 행복조각들")
-                .padding(.top, 10)
-                .padding(.bottom, 10)
+            ZStack {
+                Rectangle()
+                    .frame(width: 300, height: 48)
+                    .background(Color.black)
+                Text("당신을 위한 행복조각들당신을 위한 ")
+                    .appFont(.headlineH3)
+                    .frame(width: 200)
+                    .background(Color.brown)
+            }
             VStack(alignment: .leading) {
                 Text(title)
-                    .font(.title)
+                    .appFont(.bodyB1Bold)
                 VStack{
                     Image(imageName)
                         .resizable()

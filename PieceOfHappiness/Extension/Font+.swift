@@ -56,4 +56,8 @@ extension Font {
             }
         }
     }
+    
+    static func custom(type: FontType) -> Font {
+        return Font.custom(type.fontName, size: type.size)
+    }
 }

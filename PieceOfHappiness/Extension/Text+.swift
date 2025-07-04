@@ -8,46 +8,32 @@
 import Foundation
 import SwiftUI
 
-//extension Text {
-//    func customFont(_ type: Font.FontType) -> Text {
-//        var attr = AttributedString(self.verbatim)
-//        attr.font = .custom(type.fontName, size: type.size)
-//        var style = ParagraphStyle()
-//        style.minimumLineHeight = type.lineHeight
-//        style.maximumLineHeight = type.lineHeight
-//        attr.paragraphStyle = style
-//        return Text(attr)
-//    }
-//}
-
-struct CustomFontWithLineHeight: ViewModifier {
-    let type: Font.FontType
+struct FontModifier: ViewModifier {
+    let fontType: Font.FontType
+    let color: Color
     
     func body(content: Content) -> some View {
-        let attr = CustomFontWithLineHeight.attributedString(
-            from: content,
-            fontName: type.fontName,
-            size: type.size,
-            lineHeight: type.lineHeight
-        )
-        // content가 Text일 때만 적용
-        if let text = Mirror(reflecting: content).descendant("storage", "anyTextStorage", "string") as? String {
-            return AnyView(Text(attr))
-        } else {
-            // Text 이외는 그냥 font만 적용
-            return AnyView(
-                content.font(.custom(type.fontName, size: type.size))
-            )
-        }
+        let (lineSpacing, currentLineHeight) = calculateLineSpacing(fontType: fontType)
+        
+        content
+            .font(.custom(type: fontType))
+            .lineSpacing(lineSpacing)
+            .padding(.vertical, (fontType.lineHeight - currentLineHeight) / 2)
+            .foregroundColor(color)
     }
     
-    static func attributedString(from content: Content, fontName: String, size: CGFloat, lineHeight: CGFloat) -> AttributedString {
-        var attr = AttributedString(String(describing: content))
-        attr.font = .custom(fontName, size: size)
-        var style = NSMutableParagraphStyle()
-        style.minimumLineHeight = lineHeight
-        style.maximumLineHeight = lineHeight
-        attr.paragraphStyle = style
-        return attr
+    func calculateLineSpacing(
+        fontType: Font.FontType
+    ) -> (CGFloat, CGFloat) {
+        let font = UIFont(name: fontType.fontName, size: fontType.size) ?? .systemFont(ofSize: fontType.size)
+        let currentLineHeight = font.lineHeight
+        let requiredSpacing = fontType.lineHeight - currentLineHeight
+        return (requiredSpacing, currentLineHeight)
+    }
+}
+
+extension Text {
+    func appFont(_ fontType: Font.FontType, color: Color = .primary) -> some View {
+        modifier(FontModifier(fontType: fontType, color: color))
     }
 }
