@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF54BF3E2E1DF9F70046B090 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = CF54BF3D2E1DF9F70046B090 /* ComposableArchitecture */; };
 		CF64B6D12E0CCDE60085408D /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = CF64B6D02E0CCDE60085408D /* HorizonCalendar */; };
 		CF794A672E1504BD000EC8D1 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = CF794A662E1504BD000EC8D1 /* Nuke */; };
 		CF794A692E1504BD000EC8D1 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = CF794A682E1504BD000EC8D1 /* NukeUI */; };
@@ -44,6 +45,7 @@
 			files = (
 				CF794A692E1504BD000EC8D1 /* NukeUI in Frameworks */,
 				CF64B6D12E0CCDE60085408D /* HorizonCalendar in Frameworks */,
+				CF54BF3E2E1DF9F70046B090 /* ComposableArchitecture in Frameworks */,
 				CF794A672E1504BD000EC8D1 /* Nuke in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,6 +92,7 @@
 				CF64B6D02E0CCDE60085408D /* HorizonCalendar */,
 				CF794A662E1504BD000EC8D1 /* Nuke */,
 				CF794A682E1504BD000EC8D1 /* NukeUI */,
+				CF54BF3D2E1DF9F70046B090 /* ComposableArchitecture */,
 			);
 			productName = PieceOfHappiness;
 			productReference = CF64B6BF2E0CCB510085408D /* PieceOfHappiness.app */;
@@ -123,6 +126,7 @@
 			packageReferences = (
 				CF64B6CF2E0CCDE60085408D /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				CF794A652E1504BD000EC8D1 /* XCRemoteSwiftPackageReference "Nuke" */,
+				CF54BF3C2E1DF9F70046B090 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CF64B6C02E0CCB510085408D /* Products */;
@@ -366,6 +370,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CF54BF3C2E1DF9F70046B090 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.2;
+			};
+		};
 		CF64B6CF2E0CCDE60085408D /* XCRemoteSwiftPackageReference "HorizonCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/HorizonCalendar";
@@ -385,6 +397,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CF54BF3D2E1DF9F70046B090 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF54BF3C2E1DF9F70046B090 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		CF64B6D02E0CCDE60085408D /* HorizonCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CF64B6CF2E0CCDE60085408D /* XCRemoteSwiftPackageReference "HorizonCalendar" */;

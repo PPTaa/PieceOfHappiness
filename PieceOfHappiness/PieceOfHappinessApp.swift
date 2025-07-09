@@ -7,12 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import ComposableArchitecture
 
 @main
 struct PieceOfHappinessApp: App {
     var body: some Scene {
         WindowGroup {
-            PieceHomeView()
+            PieceHomeView(store: Store(initialState: PieceHome.State(), reducer: { PieceHome() }))
         }
     }
 }

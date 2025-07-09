@@ -8,8 +8,11 @@
 import SwiftUI
 import SwiftData
 import HorizonCalendar
+import ComposableArchitecture
 
 struct PieceHomeView: View {
+    let store: StoreOf<PieceHome>
+    
     @Environment(\.modelContext) private var modelContext
     
     @State private var calendarProxy = CalendarViewProxy()
@@ -70,6 +73,6 @@ struct PieceHomeView: View {
 }
 
 #Preview {
-    PieceHomeView()
+    PieceHomeView(store: Store(initialState: PieceHome.State(), reducer: { PieceHome() }))
         .environment(\.locale, .init(identifier: "ko"))
 }
