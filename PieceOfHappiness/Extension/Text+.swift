@@ -13,22 +13,15 @@ struct FontModifier: ViewModifier {
     let color: Color
     
     func body(content: Content) -> some View {
-        let (lineSpacing, currentLineHeight) = calculateLineSpacing(fontType: fontType)
-        
-        content
-            .font(.custom(type: fontType))
-            .lineSpacing(lineSpacing)
-            .padding(.vertical, (fontType.lineHeight - currentLineHeight) / 2)
-            .foregroundColor(color)
-    }
-    
-    func calculateLineSpacing(
-        fontType: Font.FontType
-    ) -> (CGFloat, CGFloat) {
         let font = UIFont(name: fontType.fontName, size: fontType.size) ?? .systemFont(ofSize: fontType.size)
         let currentLineHeight = font.lineHeight
         let requiredSpacing = fontType.lineHeight - currentLineHeight
-        return (requiredSpacing, currentLineHeight)
+        
+        content
+            .font(.custom(type: fontType))
+            .lineSpacing(requiredSpacing)
+            .padding(.vertical, (fontType.lineHeight - currentLineHeight) / 2)
+            .foregroundColor(color)
     }
 }
 
