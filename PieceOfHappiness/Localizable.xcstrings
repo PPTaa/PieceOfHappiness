@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "%lld" : {
 
     },
@@ -68,6 +71,12 @@
           }
         }
       }
+    },
+    "Piece Detail View" : {
+
+    },
+    "Setting" : {
+
     },
     "weekday_fri" : {
       "extractionState" : "manual",
