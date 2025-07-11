@@ -15,9 +15,7 @@ struct PieceSettingView: View {
         VStack {
             BaseHeaderView(
                 title: "설정",
-                leftButtonImage: Image(systemName: "arrow.left"),
                 onLeftButtonTapped: {
-                    print("onLeftButtonTapped")
                     store.send(.tapBackBtn)
                 }
             )

@@ -15,9 +15,7 @@ struct PieceDetailView: View {
         VStack {
             BaseHeaderView(
                 title: "\(store.date)",
-                leftButtonImage: Image(systemName: "arrow.left"),
                 onLeftButtonTapped: {
-                    print("onLeftButtonTapped")
                     store.send(.tapBackBtn)
                 }
             )

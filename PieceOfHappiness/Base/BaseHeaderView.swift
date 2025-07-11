@@ -15,7 +15,7 @@ struct BaseHeaderView: View {
     var onRightButtonTapped: (() -> Void)? = nil
     
     public init(title: String,
-                leftButtonImage: Image? = nil,
+                leftButtonImage: Image? = Image.backButton,
                 rightButtonImage: Image? = nil,
                 onLeftButtonTapped: (() -> Void)? = nil,
                 onRightButtonTapped: (() -> Void)? = nil
