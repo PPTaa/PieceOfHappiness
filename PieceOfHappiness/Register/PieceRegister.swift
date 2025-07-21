@@ -14,14 +14,15 @@ struct PieceRegister {
 
     }
     enum Action {
-        case tapBackBtn
+        case tapBackBtnWithData(String)
     }
+    @Dependency(\.dismiss) var dismiss
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .tapBackBtn:
-                return .none
+            case .tapBackBtnWithData:
+                return .run { _ in await self.dismiss() }
             }
         }
     }

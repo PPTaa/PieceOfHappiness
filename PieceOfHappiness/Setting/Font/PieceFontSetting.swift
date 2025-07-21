@@ -1,22 +1,24 @@
 //
-//  PieceDetail.swift
+//  PieceFontSetting.swift
 //  PieceOfHappiness
 //
-//  Created by Jungchul on 7/10/25.
+//  Created by Jungchul on 7/21/25.
 //
 
-import Foundation
+import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct PieceDetail {
+struct PieceFontSetting {
     @ObservableState
     struct State {
-        var date: String = ""
+        var fontType: String
     }
+    
     enum Action {
         case tapBackBtn
     }
+    
     @Dependency(\.dismiss) var dismiss
     var body: some Reducer<State, Action> {
         Reduce { state, action in

@@ -15,7 +15,7 @@ struct PieceRegisterView: View {
         VStack {
             BaseHeaderView(
                 title: "PieceRegisterView",
-                onLeftButtonTapped: { store.send(.tapBackBtn) }
+                onLeftButtonTapped: { store.send(.tapBackBtnWithData("From Register")) }
             )
             Spacer()
             Text("Hello, World!")

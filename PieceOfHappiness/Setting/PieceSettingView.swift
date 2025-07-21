@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PieceSettingView: View {
-    let store: StoreOf<PieceSetting>
+    @Bindable var store: StoreOf<PieceSetting>
     
     var body: some View {
         VStack {
@@ -20,7 +20,11 @@ struct PieceSettingView: View {
                 }
             )
             Spacer()
-            Text("Setting")
+            Button {
+                store.send(.tapFontSettingCell)
+            } label: {
+                Text("Go to Font Setting")
+            }
             Spacer()
         }
         .toolbarVisibility(.hidden, for: .navigationBar)

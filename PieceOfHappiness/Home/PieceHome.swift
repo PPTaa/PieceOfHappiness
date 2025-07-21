@@ -16,10 +16,9 @@ struct PieceHome {
         var text = "Hello, World!"
         var focusedMonth = ""
         var selectedDate = ""
+        
         // Navigation
-        @Presents var pieceDetail: PieceDetail.State?
-        @Presents var pieceRegister: PieceRegister.State?
-        @Presents var pieceSetting: PieceSetting.State?
+        var path = StackState<Path.State>()
     }
     
     enum Action {
@@ -28,10 +27,17 @@ struct PieceHome {
         case selectDate(String)
         case tapRegisterBtn
         case tapSettingBtn
+        
         // Navigation
-        case moveToDetail(PresentationAction<PieceDetail.Action>)
-        case moveToRegister(PresentationAction<PieceRegister.Action>)
-        case moveToSetting(PresentationAction<PieceSetting.Action>)
+        case path(StackActionOf<Path>)
+    }
+    @Reducer
+    enum Path {
+        case moveToDetail(PieceDetail)
+        case moveToRegister(PieceRegister)
+        // Setting
+        case moveToSetting(PieceSetting)
+        case moveToFontSetting(PieceFontSetting)
     }
     
     var body: some Reducer<State, Action> {
@@ -40,40 +46,34 @@ struct PieceHome {
             case .moveMonth(let monthString):
                 state.focusedMonth = monthString
                 return .none
+                
+            // MARK: TO Child
             case .selectDate(let dateString):
                 state.selectedDate = dateString
-                state.pieceDetail = PieceDetail.State(date: dateString)
+                state.path.append(.moveToDetail(PieceDetail.State(date:dateString)))
                 return .none
             case .tapRegisterBtn:
-                state.pieceRegister = PieceRegister.State()
+                state.path.append(.moveToRegister(PieceRegister.State()))
                 return .none
             case .tapSettingBtn:
-                state.pieceSetting = PieceSetting.State(text: "frome home setting")
+                state.path.append(.moveToSetting(PieceSetting.State(text: "from home setting")))
                 return .none
                 
-                // MARK: FROM Child
-            case .moveToDetail(.dismiss),
-                    .moveToDetail(.presented(.tapBackBtn)):
-                state.pieceDetail = nil
+            // MARK: FROM Child
+            case .path(.element(id: _, action: .moveToSetting(.tapBackBtn))):
                 return .none
-            case .moveToRegister(.dismiss),
-                    .moveToRegister(.presented(.tapBackBtn)):
-                state.pieceRegister = nil
+            case .path(.element(id: _, action: .moveToSetting(.tapFontSettingCell))):
+                state.path.append(.moveToFontSetting(PieceFontSetting.State(fontType: "TEST")))
                 return .none
-            case .moveToSetting(.dismiss),
-                    .moveToSetting(.presented(.tapBackBtn)):
-                state.pieceSetting = nil
+            case .path(.element(id: _, action: .moveToDetail(.tapBackBtn))):
+                return .none
+            case .path(.element(id: _, action: .moveToRegister(.tapBackBtnWithData(let dataString)))):
+                debugPrint("tapBackBtnWithData : \(dataString)")
+                return .none
+            case .path:
                 return .none
             }
         }
-        .ifLet(\.$pieceDetail, action: \.moveToDetail) {
-            PieceDetail()
-        }
-        .ifLet(\.$pieceRegister, action: \.moveToRegister) {
-            PieceRegister()
-        }
-        .ifLet(\.$pieceSetting, action: \.moveToSetting) {
-            PieceSetting()
-        }
+        .forEach(\.path, action: \.path)
     }
 }

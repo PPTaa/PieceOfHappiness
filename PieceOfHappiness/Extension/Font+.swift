@@ -16,6 +16,52 @@ import SwiftUI
 ///. | `Body/B2-Regular` | Regular      | 14pt       | 20pt                | 보조적인 설명 텍스트         |
 ///. | `Caption/C1`      | Regular      | 12pt       | 16pt                | 아이콘 라벨, 가장 작은 텍스트 |
 extension Font {
+    enum NoteFontStyle {
+        case cafe24(NoteFontStyle.Weight)
+        case doveMayo(NoteFontStyle.Weight)
+        case gaegu(NoteFontStyle.Weight)
+        case gmarket(NoteFontStyle.Weight)
+        
+        enum Weight {
+            case title
+            case body
+        }
+        
+        var noteFontName: String {
+            switch self {
+                
+            case .cafe24(let weight):
+                switch weight {
+                case .title:
+                    return "Cafe24Ohsquare-v2.0"
+                case .body:
+                    return "Cafe24OhsquareAir-v2.0"
+                }
+            case .doveMayo(let weight):
+                switch weight {
+                case .title:
+                    return "dovemayo_bold"
+                case .body:
+                    return "dovemayo"
+                }
+            case .gaegu(let weight):
+            switch weight {
+                case .title:
+                    return "Gaegu-Bold"
+                case .body:
+                    return "Gaegu-Regular"
+                }
+            case .gmarket(let weight):
+                switch weight {
+                case .title:
+                    return "GmarketSansTTFBold"
+                case .body:
+                    return "GmarketSansTTFMedium"
+                }
+            }
+        }
+    }
+    
     enum FontType {
         case headlineH1
         case headlineH2
@@ -25,6 +71,9 @@ extension Font {
         case bodyB2Regular
         case captionC1
         
+        case noteTitle(Font.NoteFontStyle)
+        case noteBody(Font.NoteFontStyle)
+        
         var fontName: String {
             switch self {
             case .headlineH1, .headlineH2, .bodyB1Bold:
@@ -33,6 +82,10 @@ extension Font {
                 return "Pretendard-SemiBold"
             case .bodyB1Regular, .bodyB2Regular, .captionC1:
                 return "Pretendard-Regular"
+            case .noteTitle(let style):
+                return style.noteFontName
+            case .noteBody(let style):
+                return style.noteFontName
             }
         }
         var size: CGFloat {
@@ -43,6 +96,8 @@ extension Font {
             case .bodyB1Regular, .bodyB1Bold: return 16
             case .bodyB2Regular: return 14
             case .captionC1: return 12
+            case .noteTitle: return 20
+            case .noteBody: return 16
             }
         }
         var lineHeight: CGFloat {
@@ -53,6 +108,8 @@ extension Font {
             case .bodyB1Regular, .bodyB1Bold: return 24
             case .bodyB2Regular: return 20
             case .captionC1: return 16
+            case .noteTitle: return 28
+            case .noteBody: return 26
             }
         }
     }

@@ -19,7 +19,7 @@ struct PieceHomeView: View {
         let calendar = Calendar.current
         let startDate = calendar.date(from: DateComponents(year: 1999, month: 01, day: 01))!
         let endDate = calendar.date(from: DateComponents(year: 2999, month: 12, day: 31))!
-        NavigationStack {
+        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     HStack {
@@ -87,22 +87,6 @@ struct PieceHomeView: View {
                     store.send(.moveMonth("\(today.year)-\(today.month)"))
                     calendarProxy.scrollToMonth(containing: today, scrollPosition: .centered, animated: false)
                 }
-                .navigationDestination(
-                    item: $store.scope(state: \.pieceSetting, action: \.moveToSetting)
-                ) { settingStore in
-                    PieceSettingView(store: settingStore)
-                }
-                .navigationDestination(
-                    item: $store.scope(state: \.pieceRegister, action: \.moveToRegister)
-                ) { registerStore in
-                    PieceRegisterView(store: registerStore)
-                }
-                .navigationDestination(
-                    item: $store.scope(state: \.pieceDetail, action: \.moveToDetail)
-                ) { detailStore in
-                    PieceDetailView(store: detailStore)
-                }
-                
                 Button(action: {
                     store.send(.tapRegisterBtn)
                 }) {
@@ -112,6 +96,17 @@ struct PieceHomeView: View {
                 .background(.gray)
                 .clipShape(.circle)
                 .padding(.all, 16)
+            }
+        } destination: { store in
+            switch store.case {
+            case .moveToDetail(let store):
+                PieceDetailView(store: store)
+            case .moveToSetting(let store):
+                PieceSettingView(store: store)
+            case .moveToRegister(let store):
+                PieceRegisterView(store: store)
+            case .moveToFontSetting(let store):
+                PieceFontSettingView(store: store)
             }
         }
     }
