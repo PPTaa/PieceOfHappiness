@@ -20,6 +20,7 @@ struct PieceDetail {
         var isLoading: Bool = false
         var errorMessage: String?
     }
+    
     enum Action {
         case tapBackBtn
         case onAppear
@@ -32,7 +33,9 @@ struct PieceDetail {
         case deleteHappiness(Happiness)
         case happinessDeleted(Int64)
         case deleteFailed(String)
+        case tapRegisterBtn
     }
+    
     @Dependency(\.dismiss) var dismiss
     
     var body: some Reducer<State, Action> {
@@ -159,6 +162,9 @@ struct PieceDetail {
                 state.isLoading = false
                 state.errorMessage = message
                 print("❌ \(message)")
+                return .none
+                
+            case .tapRegisterBtn:
                 return .none
             }
         }

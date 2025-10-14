@@ -67,6 +67,9 @@ struct PieceHome {
                 return .none
             case .path(.element(id: _, action: .moveToDetail(.tapBackBtn))):
                 return .none
+            case .path(.element(id: _, action: .moveToDetail(.tapRegisterBtn))):
+                state.path.append(.moveToRegister(PieceRegister.State()))
+                return .none
             case .path(.element(id: _, action: .moveToRegister(.tapBackBtnWithData(let dataString)))):
                 debugPrint("tapBackBtnWithData : \(dataString)")
                 return .none

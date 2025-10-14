@@ -48,7 +48,7 @@ struct PieceDetailView: View {
                 Spacer()
             } else if store.happinessList.isEmpty {
                 Spacer()
-                VStack {
+                VStack(spacing: 20) {
                     Image(systemName: "face.dashed")
                         .font(.largeTitle)
                         .foregroundColor(.gray)
@@ -57,6 +57,23 @@ struct PieceDetailView: View {
                     Text("먼저 Register에서 데이터를 저장해보세요!")
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    
+                    // Happiness 추가하기 버튼
+                    Button(action: {
+                        store.send(.tapRegisterBtn)
+                    }) {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Happiness 추가하기")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 40)
                 }
                 Spacer()
             } else {
