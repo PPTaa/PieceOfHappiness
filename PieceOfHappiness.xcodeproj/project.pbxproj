@@ -11,6 +11,7 @@
 		CF64B6D12E0CCDE60085408D /* HorizonCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = CF64B6D02E0CCDE60085408D /* HorizonCalendar */; };
 		CF794A672E1504BD000EC8D1 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = CF794A662E1504BD000EC8D1 /* Nuke */; };
 		CF794A692E1504BD000EC8D1 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = CF794A682E1504BD000EC8D1 /* NukeUI */; };
+		CF897D422E9DE724008084F2 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = CF897D412E9DE724008084F2 /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF794A692E1504BD000EC8D1 /* NukeUI in Frameworks */,
+				CF897D422E9DE724008084F2 /* GRDB in Frameworks */,
 				CF64B6D12E0CCDE60085408D /* HorizonCalendar in Frameworks */,
 				CF54BF3E2E1DF9F70046B090 /* ComposableArchitecture in Frameworks */,
 				CF794A672E1504BD000EC8D1 /* Nuke in Frameworks */,
@@ -93,6 +95,7 @@
 				CF794A662E1504BD000EC8D1 /* Nuke */,
 				CF794A682E1504BD000EC8D1 /* NukeUI */,
 				CF54BF3D2E1DF9F70046B090 /* ComposableArchitecture */,
+				CF897D412E9DE724008084F2 /* GRDB */,
 			);
 			productName = PieceOfHappiness;
 			productReference = CF64B6BF2E0CCB510085408D /* PieceOfHappiness.app */;
@@ -127,6 +130,7 @@
 				CF64B6CF2E0CCDE60085408D /* XCRemoteSwiftPackageReference "HorizonCalendar" */,
 				CF794A652E1504BD000EC8D1 /* XCRemoteSwiftPackageReference "Nuke" */,
 				CF54BF3C2E1DF9F70046B090 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				CF897D402E9DE724008084F2 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CF64B6C02E0CCB510085408D /* Products */;
@@ -394,6 +398,14 @@
 				minimumVersion = 12.8.0;
 			};
 		};
+		CF897D402E9DE724008084F2 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -416,6 +428,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CF794A652E1504BD000EC8D1 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
+		};
+		CF897D412E9DE724008084F2 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CF897D402E9DE724008084F2 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
