@@ -13,7 +13,7 @@ import GRDB
 struct PieceRegister {
     @ObservableState
     struct State {
-
+        var date: String
     }
     enum Action {
         case tapBackBtnWithData(String)
@@ -27,11 +27,11 @@ struct PieceRegister {
             case .tapBackBtnWithData:
                 return .run { _ in await self.dismiss() }
             case .tapSaveBtnWithData(let data):
-                return .run { _ in
+                return .run { [date = state.date] send in
                     do {
                         // 더미 Happiness 데이터 생성
                         var happiness = Happiness(
-                            date: "2025-10-14",
+                            date: date,
                             imagePath: ["dummy-image-1.jpg", "dummy-image-2.jpg"],
                             title: "오늘은 정말 행복한 하루였어요! 🌟",
                             message: "친구들과 함께 맛있는 음식을 먹고, 좋은 영화를 보면서 즐거운 시간을 보냈습니다. 이런 작은 순간들이 모여서 큰 행복이 되는 것 같아요. \(data)"

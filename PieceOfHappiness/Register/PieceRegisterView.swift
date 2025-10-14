@@ -54,5 +54,5 @@ struct PieceRegisterView: View {
 }
 
 #Preview {
-    PieceRegisterView(store: Store(initialState: PieceRegister.State(), reducer: { PieceRegister() }))
+    PieceRegisterView(store: Store(initialState: PieceRegister.State(date: "yyyy-MM-dd"), reducer: { PieceRegister() }))
 }

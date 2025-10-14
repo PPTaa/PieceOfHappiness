@@ -33,7 +33,7 @@ struct PieceDetail {
         case deleteHappiness(Happiness)
         case happinessDeleted(Int64)
         case deleteFailed(String)
-        case tapRegisterBtn
+        case tapRegisterBtn(date: String)
     }
     
     @Dependency(\.dismiss) var dismiss

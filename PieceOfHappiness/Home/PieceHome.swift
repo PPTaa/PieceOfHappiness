@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 @Reducer
 struct PieceHome {
@@ -53,7 +54,7 @@ struct PieceHome {
                 state.path.append(.moveToDetail(PieceDetail.State(date:dateString)))
                 return .none
             case .tapRegisterBtn:
-                state.path.append(.moveToRegister(PieceRegister.State()))
+                state.path.append(.moveToRegister(PieceRegister.State(date: Date().yyyyMMdd)))
                 return .none
             case .tapSettingBtn:
                 state.path.append(.moveToSetting(PieceSetting.State(text: "from home setting")))
@@ -67,8 +68,8 @@ struct PieceHome {
                 return .none
             case .path(.element(id: _, action: .moveToDetail(.tapBackBtn))):
                 return .none
-            case .path(.element(id: _, action: .moveToDetail(.tapRegisterBtn))):
-                state.path.append(.moveToRegister(PieceRegister.State()))
+            case .path(.element(id: _, action: .moveToDetail(.tapRegisterBtn(let date)))):
+                state.path.append(.moveToRegister(PieceRegister.State(date: date)))
                 return .none
             case .path(.element(id: _, action: .moveToRegister(.tapBackBtnWithData(let dataString)))):
                 debugPrint("tapBackBtnWithData : \(dataString)")

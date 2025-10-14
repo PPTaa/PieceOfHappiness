@@ -60,7 +60,7 @@ struct PieceDetailView: View {
                     
                     // Happiness 추가하기 버튼
                     Button(action: {
-                        store.send(.tapRegisterBtn)
+                        store.send(.tapRegisterBtn(date: store.date))
                     }) {
                         HStack {
                             Image(systemName: "plus.circle.fill")
