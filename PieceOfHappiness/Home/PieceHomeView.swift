@@ -99,6 +99,8 @@ struct PieceHomeView: View {
             }
         } destination: { store in
             switch store.case {
+            case .moveToDetail(let store):
+                PieceDetailView(store: store)
             case .moveToDetailList(let store):
                 PieceDetailListView(store: store)
             case .moveToSetting(let store):

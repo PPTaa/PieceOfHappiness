@@ -45,6 +45,8 @@ struct PieceHome {
     enum Path {
         case moveToDetailList(PieceDetailList)
         case moveToRegister(PieceRegister)
+        // DetailList
+        case moveToDetail(PieceDetail)
         // Setting
         case moveToSetting(PieceSetting)
         case moveToFontSetting(PieceFontSetting)
@@ -124,6 +126,9 @@ struct PieceHome {
                 return .none
             case .path(.element(id: _, action: .moveToRegister(.tapBackBtnWithData(let dataString)))):
                 debugPrint("tapBackBtnWithData : \(dataString)")
+                return .none
+            case .path(.element(id: _, action: .moveToDetailList(.selectHappiness(let happiness)))):
+                state.path.append(.moveToDetail(PieceDetail.State(happiness: happiness)))
                 return .none
             case .path:
                 return .none
