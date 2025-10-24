@@ -160,3 +160,25 @@ extension Happiness: Codable, FetchableRecord, MutablePersistableRecord {
         try db.execute(sql: sql, arguments: [happinessId, hashtagContent])
     }
 }
+
+extension Happiness {
+    static func countForMonth(_ yearMonth: String, in db: Database) throws -> Int {
+        let sql = """
+            SELECT COUNT(*) FROM Happiness
+            WHERE date LIKE ?
+        """
+        
+        return try Int.fetchOne(db, sql: sql, arguments: ["\(yearMonth)%"]) ?? 0
+    }
+    
+    // 특정 달의 모든 Happiness 조회
+    static func fetchForMonth(_ yearMonth: String, in db: Database) throws -> [Happiness] {
+        let sql = """
+            SELECT * FROM Happiness
+            WHERE date LIKE ?
+            ORDER BY date DESC
+        """
+        
+        return try Happiness.fetchAll(db, sql: sql, arguments: ["\(yearMonth)%"])
+    }
+}

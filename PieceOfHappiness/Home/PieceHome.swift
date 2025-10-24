@@ -18,6 +18,8 @@ struct PieceHome {
         var focusedMonth = ""
         var selectedDate = ""
         
+        var happinessCount = 0
+        
         // Navigation
         var path = StackState<Path.State>()
     }
@@ -26,6 +28,8 @@ struct PieceHome {
         // Other
         case moveMonth(String)
         case selectDate(String)
+        case updateCurrentMonth(String)
+        case updateCurrentMonthHappinessCount(Int)
         case tapRegisterBtn
         case tapSettingBtn
         
@@ -45,10 +49,22 @@ struct PieceHome {
         Reduce { state, action in
             switch action {
             case .moveMonth(let monthString):
+                return .send(.updateCurrentMonth(monthString))
+            case .updateCurrentMonth(let monthString):
                 state.focusedMonth = monthString
+                return .run { send in
+                    do {
+                        let happinessCount = try await LocalDatabase.shared.reader.read { db in
+                            try Happiness.countForMonth(monthString, in: db)
+                        }
+                        await send(.updateCurrentMonthHappinessCount(happinessCount))
+                    } catch {
+                    }
+                }
+            case .updateCurrentMonthHappinessCount(let count):
+                state.happinessCount = count
                 return .none
-                
-            // MARK: TO Child
+            // MARK: - TO Child
             case .selectDate(let dateString):
                 state.selectedDate = dateString
                 state.path.append(.moveToDetail(PieceDetail.State(date:dateString)))
