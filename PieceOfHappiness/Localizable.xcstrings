@@ -16,13 +16,7 @@
     "💎" : {
 
     },
-    "💡" : {
-
-    },
     "📸 %@" : {
-
-    },
-    "🔥" : {
 
     },
     "count_subview_month_detail" : {
@@ -41,6 +35,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "연속 기록 중"
+          }
+        }
+      }
+    },
+    "days" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일"
           }
         }
       }

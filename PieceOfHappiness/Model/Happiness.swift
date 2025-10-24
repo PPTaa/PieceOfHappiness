@@ -181,4 +181,50 @@ extension Happiness {
         
         return try Happiness.fetchAll(db, sql: sql, arguments: ["\(yearMonth)%"])
     }
+    
+    // 특정 날짜부터 과거로 연속된 Happiness 개수 계산
+    static func consecutiveCount(from dateString: String, in db: Database) throws -> Int {
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        guard var currentDate = dateFormatter.date(from: dateString) else {
+            print("❌ 잘못된 날짜 형식: \(dateString)")
+            return 0
+        }
+        
+        var consecutiveCount = 0
+        
+        // 해당 날짜부터 과거로 거슬러 올라가며 연속 확인
+        while true {
+            let checkDateString = dateFormatter.string(from: currentDate)
+            
+            // 해당 날짜에 Happiness가 있는지 확인
+            let count = try Happiness
+                .filter(Happiness.Columns.date == checkDateString)
+                .fetchCount(db)
+            
+            if count > 0 {
+                consecutiveCount += 1
+                // 하루 전으로 이동
+                guard let previousDate = calendar.date(byAdding: .day, value: -1, to: currentDate) else {
+                    break
+                }
+                currentDate = previousDate
+            } else {
+                break
+            }
+        }
+        
+        print("📊 연속 기록: \(dateString)부터 \(consecutiveCount)일")
+        return consecutiveCount
+    }
+    
+    // 오늘부터 과거로 연속된 Happiness 개수 계산
+    static func currentConsecutiveCount(in db: Database) throws -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let todayString = dateFormatter.string(from: Date())
+        return try consecutiveCount(from: todayString, in: db)
+    }
 }

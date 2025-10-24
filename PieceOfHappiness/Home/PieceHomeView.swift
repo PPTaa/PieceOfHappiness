@@ -79,12 +79,12 @@ struct PieceHomeView: View {
                     .frame(maxWidth: .infinity)
                     .background(Color.red)
                     PieceCardView(title: "dummy text", imageName: "dummy_image", contents: "dummy contents")
-                    PieceCountView(monthCount: store.happinessCount, sequenceCount: 5)
+                    PieceCountView(monthCount: store.happinessCount, sequenceCount: store.consecutiveDaysCount)
                     PieceEncourageView()
                 }
                 .onAppear {
+                    store.send(.onAppear)
                     let today = Date()
-                    store.send(.moveMonth("\(today.year)-\(today.month)"))
                     calendarProxy.scrollToMonth(containing: today, scrollPosition: .centered, animated: false)
                 }
                 Button(action: {
