@@ -29,20 +29,31 @@ struct PieceCountSubview: View {
     enum CountSubViewType {
         case Month
         case Sequence
+        var showIcon: String {
+            switch self {
+            case .Month:
+                "💡"
+            case .Sequence:
+                "🔥"
+            }
+        }
+        var showText: String {
+            switch self {
+            case .Month:
+                NSLocalizedString("items", comment: "")
+            case .Sequence:
+                NSLocalizedString("days", comment: "")
+            }
+        }
     }
     var type: CountSubViewType = .Month
     let count: Int
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                switch type {
-                case .Month:
-                    Text("💡")
-                case .Sequence:
-                    Text("🔥")
-                }
+                Text(type.showIcon)
                 Text("\(count)")
-                Text("items")
+                Text(type.showText)
             }
             switch type {
             case .Month:
