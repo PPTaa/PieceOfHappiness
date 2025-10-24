@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct PieceCountView: View {
-    @State var monthCount = 0
-    @State var sequenceCount = 0
+    let monthCount: Int
+    let sequenceCount: Int
     
     var body: some View {
         HStack {
@@ -30,8 +30,8 @@ struct PieceCountSubview: View {
         case Month
         case Sequence
     }
-    @State var type: CountSubViewType = .Month
-    @State var count = 0
+    var type: CountSubViewType = .Month
+    let count: Int
     var body: some View {
         VStack(alignment: .center) {
             HStack {

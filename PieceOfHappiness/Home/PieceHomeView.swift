@@ -79,7 +79,7 @@ struct PieceHomeView: View {
                     .frame(maxWidth: .infinity)
                     .background(Color.red)
                     PieceCardView(title: "dummy text", imageName: "dummy_image", contents: "dummy contents")
-                    PieceCountView(monthCount: 10, sequenceCount: 5)
+                    PieceCountView(monthCount: store.happinessCount, sequenceCount: 5)
                     PieceEncourageView()
                 }
                 .onAppear {
