@@ -10,7 +10,7 @@ import ComposableArchitecture
 import GRDB
 
 @Reducer
-struct PieceDetail {
+struct PieceDetailList {
     @ObservableState
     struct State {
         var date: String = ""

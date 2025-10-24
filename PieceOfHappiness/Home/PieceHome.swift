@@ -38,7 +38,7 @@ struct PieceHome {
     }
     @Reducer
     enum Path {
-        case moveToDetail(PieceDetail)
+        case moveToDetailList(PieceDetailList)
         case moveToRegister(PieceRegister)
         // Setting
         case moveToSetting(PieceSetting)
@@ -67,7 +67,7 @@ struct PieceHome {
             // MARK: - TO Child
             case .selectDate(let dateString):
                 state.selectedDate = dateString
-                state.path.append(.moveToDetail(PieceDetail.State(date:dateString)))
+                state.path.append(.moveToDetailList(PieceDetailList.State(date:dateString)))
                 return .none
             case .tapRegisterBtn:
                 state.path.append(.moveToRegister(PieceRegister.State(date: Date().yyyyMMdd)))
@@ -82,9 +82,9 @@ struct PieceHome {
             case .path(.element(id: _, action: .moveToSetting(.tapFontSettingCell))):
                 state.path.append(.moveToFontSetting(PieceFontSetting.State(fontType: "TEST")))
                 return .none
-            case .path(.element(id: _, action: .moveToDetail(.tapBackBtn))):
+            case .path(.element(id: _, action: .moveToDetailList(.tapBackBtn))):
                 return .none
-            case .path(.element(id: _, action: .moveToDetail(.tapRegisterBtn(let date)))):
+            case .path(.element(id: _, action: .moveToDetailList(.tapRegisterBtn(let date)))):
                 state.path.append(.moveToRegister(PieceRegister.State(date: date)))
                 return .none
             case .path(.element(id: _, action: .moveToRegister(.tapBackBtnWithData(let dataString)))):

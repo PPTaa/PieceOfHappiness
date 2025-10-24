@@ -8,8 +8,8 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct PieceDetailView: View {
-    let store: StoreOf<PieceDetail>
+struct PieceDetailListView: View {
+    let store: StoreOf<PieceDetailList>
     
     var body: some View {
         VStack {
@@ -110,5 +110,5 @@ struct PieceDetailView: View {
 }
 
 #Preview {
-    PieceDetailView(store: Store(initialState: PieceDetail.State(), reducer: { PieceDetail() }))
+    PieceDetailListView(store: Store(initialState: PieceDetailList.State(), reducer: { PieceDetailList() }))
 }
