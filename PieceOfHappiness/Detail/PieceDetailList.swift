@@ -76,7 +76,7 @@ struct PieceDetailList {
                     print("📝 제목: \(happiness.title)")
                     print("📅 날짜: \(happiness.date)")
                     print("💬 메시지: \(happiness.message)")
-                    print("📸 이미지 경로: \(happiness.imagePath)")
+                    print("📸 이미지 Data: \(happiness.imageData)")
                     print("---")
                 }
                 return .none

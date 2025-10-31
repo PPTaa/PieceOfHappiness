@@ -35,18 +35,15 @@ struct HappinessCard: View {
                 .lineLimit(nil)
             
             // 이미지 경로들
-            if !happiness.imagePath.isEmpty {
+            if let imageData = happiness.imageData {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("이미지:")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
-                    
-                    ForEach(happiness.imagePath, id: \.self) { imagePath in
-                        Text("📸 \(imagePath)")
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                    }
+                    Image(data: imageData)?
+                        .resizable()
+                        .scaledToFit()
                 }
             }
             

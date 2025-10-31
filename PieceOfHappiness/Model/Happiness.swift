@@ -11,13 +11,13 @@ import GRDB
 struct Happiness {
     var id: Int64?
     var date: String // yyyy-MM-dd
-    var imagePath: [String] // JSON으로 저장될 배열
+    var imageData: Data? // JSON으로 저장될 배열
     var title: String
     var message: String
     
-    init(date: String, imagePath: [String], title: String, message: String) {
+    init(date: String, imageData: Data?, title: String, message: String) {
         self.date = date
-        self.imagePath = imagePath
+        self.imageData = imageData
         self.title = title
         self.message = message
     }
@@ -31,26 +31,19 @@ extension Happiness: Codable, FetchableRecord, MutablePersistableRecord {
     enum Columns {
         static let id = Column(CodingKeys.id)
         static let date = Column(CodingKeys.date)
-        static let imagePath = Column(CodingKeys.imagePath)
+        static let imageData = Column(CodingKeys.imageData)
         static let title = Column(CodingKeys.title)
         static let message = Column(CodingKeys.message)
     }
     
-    // Encode/decode imagePath array as JSON string
+    // Encode/decode
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decodeIfPresent(Int64.self, forKey: .id)
         date = try container.decode(String.self, forKey: .date)
         title = try container.decode(String.self, forKey: .title)
         message = try container.decode(String.self, forKey: .message)
-        
-        // Decode JSON string to array
-        let imagePathString = try container.decode(String.self, forKey: .imagePath)
-        if let data = imagePathString.data(using: .utf8) {
-            imagePath = try JSONDecoder().decode([String].self, from: data)
-        } else {
-            imagePath = []
-        }
+        imageData = try container.decode(Data.self, forKey: .imageData)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -59,15 +52,11 @@ extension Happiness: Codable, FetchableRecord, MutablePersistableRecord {
         try container.encode(date, forKey: .date)
         try container.encode(title, forKey: .title)
         try container.encode(message, forKey: .message)
-        
-        // Encode array as JSON string
-        let imagePathData = try JSONEncoder().encode(imagePath)
-        let imagePathString = String(data: imagePathData, encoding: .utf8) ?? "[]"
-        try container.encode(imagePathString, forKey: .imagePath)
+        try container.encode(imageData, forKey: .imageData)
     }
     
     private enum CodingKeys: String, CodingKey {
-        case id, date, imagePath, title, message
+        case id, date, imageData, title, message
     }
     
     // GRDB persistence

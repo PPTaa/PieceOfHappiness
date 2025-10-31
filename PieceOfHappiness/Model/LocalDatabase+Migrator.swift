@@ -28,7 +28,7 @@ extension LocalDatabase {
         try db.create(table: "Happiness") { table in
             table.autoIncrementedPrimaryKey("id")
             table.column("date", .text).notNull()
-            table.column("imagePath", .text).notNull() // JSON array as string
+            table.column("imageData", .text).notNull() // JSON array as string
             table.column("title", .text).notNull()
             table.column("message", .text).notNull()
         }
