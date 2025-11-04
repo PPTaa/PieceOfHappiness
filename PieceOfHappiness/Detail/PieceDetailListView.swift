@@ -79,10 +79,13 @@ struct PieceDetailListView: View {
             } else {
                 ScrollView {
                     LazyVStack(spacing: 16) {
-                        ForEach(store.happinessList, id: \.id) { happiness in
+                        ForEach(store.happinessList.indices, id: \.self) { index in
+                            let happiness = store.happinessList[index]
+                            let hashtags = index < store.hashTagList.count ? store.hashTagList[index] : []
+                            
                             HappinessCard(
                                 happiness: happiness,
-                                hashtags: store.selectedHappiness?.id == happiness.id ? store.hashtags : [],
+                                hashtags: hashtags,
                                 onTap: {
                                     store.send(.selectHappiness(happiness))
                                 },

@@ -49,23 +49,12 @@ struct HappinessCard: View {
             
             // 해시태그들
             if !hashtags.isEmpty {
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text("해시태그:")
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(.secondary)
-                    
-                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 4) {
-                        ForEach(hashtags, id: \.id) { hashtag in
-                            Text(hashtag.content)
-                                .font(.caption)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.blue.opacity(0.1))
-                                .foregroundColor(.blue)
-                                .cornerRadius(8)
-                        }
-                    }
+                    HashTagDisplayView(hashtags: hashtags, style: .compact)
                 }
             }
             

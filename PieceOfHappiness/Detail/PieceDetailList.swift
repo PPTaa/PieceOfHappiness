@@ -15,6 +15,7 @@ struct PieceDetailList {
     struct State {
         var date: String = ""
         var happinessList: [Happiness] = []
+        var hashTagList: [[HashTag]] = []
         var selectedHappiness: Happiness?
         var hashtags: [HashTag] = []
         var isLoading: Bool = false
@@ -25,10 +26,8 @@ struct PieceDetailList {
         case tapBackBtn
         case onAppear
         case loadHappinessData
-        case happinessDataLoaded([Happiness])
+        case happinessDataLoaded(([Happiness], [[HashTag]]))
         case selectHappiness(Happiness)
-        case loadHashtagsForHappiness(Int64)
-        case hashtagsLoaded([HashTag])
         case loadFailed(String)
         case deleteHappiness(Happiness)
         case happinessDeleted(Int64)
@@ -52,82 +51,34 @@ struct PieceDetailList {
                 state.errorMessage = nil
                 return .run { [date = state.date] send in
                     do {
-                        let happinessList = try await LocalDatabase.shared.reader.read { db in
+                        let (happinessList, hashTagList) = try await LocalDatabase.shared.reader.read { db in
+                            var happinesses: [Happiness]
                             if date.isEmpty {
                                 // 날짜가 비어있으면 모든 데이터 조회
-                                return try Happiness.fetchAll(db)
+                                happinesses = try Happiness.fetchAll(db)
                             } else {
                                 // 특정 날짜의 데이터만 조회
                                 print("📅 특정 날짜 조회: \(date)")
-                                return try Happiness.filter(Happiness.Columns.date == date).fetchAll(db)
+                                happinesses = try Happiness.filter(Happiness.Columns.date == date).fetchAll(db)
                             }
+                            var hashTags: [[HashTag]] = happinesses.compactMap { try? $0.hashtags(in: db) }
+                            return (happinesses, hashTags)
                         }
-                        await send(.happinessDataLoaded(happinessList))
+                        await send(.happinessDataLoaded((happinessList, hashTagList)))
                     } catch {
                         await send(.loadFailed("Happiness 데이터 로드 실패: \(error.localizedDescription)"))
                     }
                 }
                 
-            case let .happinessDataLoaded(happinessList):
+            case let .happinessDataLoaded((happinessList, hashTagList)):
                 state.isLoading = false
                 state.happinessList = happinessList
+                state.hashTagList = hashTagList
                 print("✅ Happiness 데이터 로드 완료: \(happinessList.count)개")
-                for happiness in happinessList {
-                    print("📝 제목: \(happiness.title)")
-                    print("📅 날짜: \(happiness.date)")
-                    print("💬 메시지: \(happiness.message)")
-                    print("📸 이미지 Data: \(happiness.imageData)")
-                    print("---")
-                }
                 return .none
                 
             case let .selectHappiness(happiness):
                 state.selectedHappiness = happiness
-                if let happinessId = happiness.id {
-                    return .send(.loadHashtagsForHappiness(happinessId))
-                }
-                return .none
-                
-            case let .loadHashtagsForHappiness(happinessId):
-                return .run { send in
-                    do {
-                        print("🔍 해시태그 조회 시작 - Happiness ID: \(happinessId)")
-                        
-                        let hashtags = try await LocalDatabase.shared.reader.read { db in
-                            // 먼저 중간 테이블에 데이터가 있는지 확인
-                            let relationCount = try HappinessHashtag
-                                .filter(HappinessHashtag.Columns.happinessId == happinessId)
-                                .fetchCount(db)
-                            print("🔗 HappinessHashtag 관계 개수: \(relationCount)")
-                            
-                            // 전체 해시태그 개수 확인
-                            let totalHashtags = try HashTag.fetchCount(db)
-                            print("🏷️ 전체 HashTag 개수: \(totalHashtags)")
-                            
-                            let sql = """
-                                SELECT h.* FROM Hashtag h
-                                JOIN HappinessHashtag hh ON h.id = hh.hashtagId
-                                WHERE hh.happinessId = ?
-                            """
-                            print("📝 실행할 SQL: \(sql)")
-                            return try HashTag.fetchAll(db, sql: sql, arguments: [happinessId])
-                        }
-                        
-                        print("🎯 조회된 해시태그 개수: \(hashtags.count)")
-                        for hashtag in hashtags {
-                            print("   - \(hashtag.content) (ID: \(hashtag.id ?? -1))")
-                        }
-                        
-                        await send(.hashtagsLoaded(hashtags))
-                    } catch {
-                        print("❌ 해시태그 조회 오류: \(error)")
-                        await send(.loadFailed("Hashtag 데이터 로드 실패: \(error.localizedDescription)"))
-                    }
-                }
-                
-            case let .hashtagsLoaded(hashtags):
-                state.hashtags = hashtags
-                print("🏷️ 로드된 해시태그: \(hashtags.map { $0.content })")
                 return .none
                 
             case let .loadFailed(message):
