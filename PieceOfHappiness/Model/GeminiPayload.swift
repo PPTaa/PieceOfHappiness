@@ -43,4 +43,17 @@ struct GeminiResponse: Decodable {
         }
     }
 }
-
+//        let endpointString = "https://factchat-cloud.mindlogic.ai/v1/api/google/models/generate-content"
+//        let payload = GeminiPayload(
+//            model: "gemini-2.0-flash", // 2.0flash (약 5초) vs 2.5flash (약 15초)
+//            contents: [
+//                GeminiContentPayload(
+//                    role: "user",
+//                    parts: [
+//                        GeminiContentPart(text: prompt, inline_data: nil),
+//                        GeminiContentPart(text: nil, inline_data: GeminiInlineData(mime_type: "image/jpeg", data: base64))
+//                    ]
+//                )
+//            ],
+//            temperature: nil
+//        )

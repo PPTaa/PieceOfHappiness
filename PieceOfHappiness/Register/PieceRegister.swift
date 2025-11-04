@@ -19,6 +19,7 @@ struct PieceRegister {
         var message: String = ""
         var date: String
         var selectedData: Data? = nil
+        var hashTags: [HashTag] = []
 
     }
     enum Action {
@@ -27,6 +28,7 @@ struct PieceRegister {
         //
         case titleChanged(String)
         case messageChanged(String)
+        case hashTagsChanged([HashTag])
         case imageSelected(Data)
     }
     @Dependency(\.dismiss) var dismiss
@@ -64,16 +66,8 @@ struct PieceRegister {
                             // ID가 설정된 후 hashtag 추가
                             if let happinessId = happiness.id {
                                 print("✅ Happiness ID 확인됨: \(happinessId)")
-                                try happiness.addHashtags([
-                                    "#행복한하루",
-                                    "#친구들과함께",
-                                    "#좋은추억",
-                                    "#감사",
-                                    "#일상의기쁨"
-                                ], in: db)
-                                
+                                try happiness.addHashtags(state.hashTags, in: db)
                                 print("🏷️ 해시태그 추가 완료!")
-                                
                                 // 저장된 해시태그 확인
                                 let savedHashtags = try happiness.hashtags(in: db)
                                 print("✅ 저장된 해시태그: \(savedHashtags.map { $0.content })")
@@ -98,6 +92,9 @@ struct PieceRegister {
             case let .messageChanged(message):
                 state.message = message
                 return .none
+            case let .hashTagsChanged(hashTags):
+                state.hashTags = hashTags
+                return.none
             case let .imageSelected(data):
                 let bcf = ByteCountFormatter()
                 bcf.allowedUnits = [.useMB] // optional: restricts the units to MB only
@@ -107,8 +104,8 @@ struct PieceRegister {
                 debugPrint("data mb Size: \(string)")
                 state.selectedData = data
                 return .run { send in
-                    try? await classifyImageWithLLM(data: data)
-//                    try? await classifyImage(data: data)
+                    let hashTags = (try? await classifyImageWithLLM(data: data)) ?? []
+                    await send(.hashTagsChanged(hashTags))
                 }
             }
         }
@@ -127,17 +124,17 @@ extension PieceRegister {
         }
     }
     
-    func classifyImageWithLLM(data: Data) async throws {
+    func classifyImageWithLLM(data: Data) async throws -> [HashTag] {
         // 1) Prepare image as Base64 (compressed)
         guard let uiImage = UIImage(data: data),
-              let jpegData = uiImage.jpegData(compressionQuality: 0.2) else { return }
+              let jpegData = uiImage.jpegData(compressionQuality: 0.2) else { return [] }
         let base64 = jpegData.base64EncodedString()
         let dataURL = "data:image/jpeg;base64,\(base64)"
 
         // 2) Build request to an OpenAI-compatible chat completions endpoint
         let endpointString = "https://factchat-cloud.mindlogic.ai/v1/api/openai/chat/completions"
-//        let endpointString = "https://factchat-cloud.mindlogic.ai/v1/api/google/models/generate-content"
-        guard let url = URL(string: endpointString) else { return }
+
+        guard let url = URL(string: endpointString) else { return [] }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -148,7 +145,7 @@ extension PieceRegister {
         let prompt = "이 이미지를 간단히 설명하고, 최대 5개의 관련 해시태그를 한국어로 추천해줘. 형식: \n설명: ...\n해시태그: #태그1 #태그2 #태그3"
 
         let payload = OpenAIPayload(
-            model: "gpt-5-mini", // gpt-5-nano(약15초), gpt-4.1-nano(약5초), gpt-4o(약6초)
+            model: "gpt-4.1-nano", // gpt-5-nano(약15초), gpt-4.1-nano(약5초), gpt-4o(약6초)
             messages: [
                 OpenAIMessagePayload(
                     role: "user",
@@ -160,19 +157,6 @@ extension PieceRegister {
             ],
             temperature: 1
         )
-//        let payload = GeminiPayload(
-//            model: "gemini-2.0-flash", // 2.0flash (약 5초) vs 2.5flash (약 15초)
-//            contents: [
-//                GeminiContentPayload(
-//                    role: "user",
-//                    parts: [
-//                        GeminiContentPart(text: prompt, inline_data: nil),
-//                        GeminiContentPart(text: nil, inline_data: GeminiInlineData(mime_type: "image/jpeg", data: base64))
-//                    ]
-//                )
-//            ],
-//            temperature: nil
-//        )
 
         do {
             let encoded = try JSONEncoder().encode(payload)
@@ -182,7 +166,7 @@ extension PieceRegister {
             let (responseData, response) = try await URLSession.shared.data(for: request)
             guard let http = response as? HTTPURLResponse else {
                 print("❌ 유효하지 않은 HTTP 응답")
-                return
+                return []
             }
 
             let end = Date().timeIntervalSince1970
@@ -192,9 +176,9 @@ extension PieceRegister {
                 do {
                     let result = try JSONDecoder().decode(OpenAIResponse.self, from: responseData)
                     if let content = result.choices.first?.message.content {
-//                    let result = try JSONDecoder().decode(GeminiResponse.self, from: responseData)
-//                    if let content = result.candidates.first?.content.parts.first?.text {
                         print("🤖 LLM 분석 결과:\n\(content)")
+                        let hashTags = content.components(separatedBy: " ").filter { $0.contains("#") }.map { HashTag(content: $0) }
+                        return hashTags
                     } else {
                         let raw = String(data: responseData, encoding: .utf8) ?? "(binary)"
                         print("⚠️ 예상치 못한 응답 형식: \n\(raw)")
@@ -211,5 +195,6 @@ extension PieceRegister {
             print("❌ LLM 요청 중 오류: \(error)")
             throw error
         }
+        return []
     }
 }

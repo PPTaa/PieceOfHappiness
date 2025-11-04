@@ -39,3 +39,17 @@ struct OpenAIResponse: Codable {
         }
     }
 }
+//let endpointString = "https://factchat-cloud.mindlogic.ai/v1/api/openai/chat/completions"
+//let payload = OpenAIPayload(
+//    model: "gpt-4.1-nano", // gpt-5-nano(약15초), gpt-4.1-nano(약5초), gpt-4o(약6초)
+//    messages: [
+//        OpenAIMessagePayload(
+//            role: "user",
+//            content: [
+//                OpenAIContentPart(type: "text", text: prompt, image_url: nil),
+//                OpenAIContentPart(type: "image_url", text: nil, image_url: OpenAIImageURL(url: dataURL))
+//            ]
+//        )
+//    ],
+//    temperature: 1
+//)

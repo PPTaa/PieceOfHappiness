@@ -16,7 +16,9 @@ struct PieceRegisterView: View {
     private enum Field: Hashable { case title, message }
     
     var body: some View {
-        VStack {
+        let selectedData = store.selectedData
+        
+        return VStack {
             BaseHeaderView(
                 title: "PieceRegisterView",
                 onLeftButtonTapped: { store.send(.tapBackBtnWithData("From Register")) }
@@ -30,12 +32,12 @@ struct PieceRegisterView: View {
                             .foregroundColor(.primary)
                         
                         PhotosPicker(selection: $selectedItem, matching: .images) {
-                            if let selectedData = store.selectedData,
-                               let selectedImage = UIImage(data: selectedData) {
+                            if let imageData = selectedData,
+                               let selectedImage = UIImage(data: imageData) {
                                 
                                 Image(uiImage: selectedImage)
                                     .resizable()
-                                    .scaledToFill()
+                                    .scaledToFit()
                                     .frame(height: 200)
                                     .clipShape(RoundedRectangle(cornerRadius: 12))
                             } else {
@@ -71,6 +73,9 @@ struct PieceRegisterView: View {
                         TextField("메시지 입력", text: $store.message.sending(\.messageChanged))
                             .autocorrectionDisabled()
                     }
+                    
+                    // 해시태그 섹션
+                    HashTagInputView(store: store)
                     
                     Spacer(minLength: 20)
                     
@@ -124,11 +129,10 @@ struct PieceRegisterView: View {
                     }
                 }
             }
-            .onChange(of: selectedItem) { oldValue, newValue in
-                Task { @MainActor in
-                    if let data = try? await newValue?.loadTransferable(type: Data.self) {
-                        store.send(.imageSelected(data))
-                    }
+            .task(id: selectedItem) {
+                guard let item = selectedItem else { return }
+                if let data = try? await item.loadTransferable(type: Data.self) {
+                    store.send(.imageSelected(data))
                 }
             }
         }

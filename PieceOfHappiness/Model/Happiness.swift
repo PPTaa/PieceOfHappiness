@@ -79,6 +79,11 @@ extension Happiness: Codable, FetchableRecord, MutablePersistableRecord {
         return try HashTag.fetchAll(db, sql: sql, arguments: [happinessId])
     }
     
+    func addHashtags(_ hashtags: [HashTag], in db: Database) throws {
+        let hashTagStrings: [String] = hashtags.map { $0.content }
+        try self.addHashtags(hashTagStrings, in: db)
+    }
+    
     func addHashtags(_ hashtags: [String], in db: Database) throws {
         guard let happinessId = id else {
             print("❌ addHashtags: Happiness ID가 nil입니다!")
