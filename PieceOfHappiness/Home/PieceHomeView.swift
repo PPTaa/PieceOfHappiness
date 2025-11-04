@@ -69,7 +69,7 @@ struct PieceHomeView: View {
                             .background(Color.green)
                     })
                     .onDaySelection { day in
-                        store.send(.selectDate("\(day.month.year)-\(day.month.month)-\(day.day)"))
+                        store.send(.selectDate("\(day.month.year)-\(day.month.month)-\(String(format: "%02d", day.day))"))
                     }
                     .onDeceleratingEnd({ visibleDayRange in
                         print("\(visibleDayRange)")
